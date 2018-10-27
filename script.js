@@ -1,9 +1,10 @@
-const prereqs = {
-    'CS1': {prereqs: 'none', coreqs: 'none'},
-    'CS31': {prereqs: 'none', coreqs: 'none'},
-    'Eng Comp 3': {prereqs: 'none', coreqs: 'none'},
-    'Math 31A': {prereqs: 'Math 30B', coreqs: 'none'}
-};
+// const prereqs = {
+//     'CS1': {prereqs: 'none', coreqs: 'none'},
+//     'CS31': {prereqs: 'none', coreqs: 'none'},
+//     'Eng Comp 3': {prereqs: 'none', coreqs: 'none'},
+//     'Math 31A': {prereqs: 'Math 30B', coreqs: 'none'}
+// };
+
 
 const allClasses = ['COM SCI 1', 'COM SCI 31', 'ENGCOMP 3', 'MATH 31A', 'COM SCI 32', 'MATH 31B', 'PHYSICS 1A', 'COM SCI 33', 'MATH 32A', 'PHYSICS 1B', 'COM SCI 35L', 'COM SCI M51A', 'MATH 32B', 'MATH 33A', 'MATH 61', 'PHYSICS 1C', 'PHYSICS 4BL', 'COM SCI 111', 'COM SCI M152A', 'MATH 33B', 'GE', 'COM SCI 118', 'COM SCI 180', 'GE', 'SCI/TECH', 'COM SCI 131', 'COM SCI M151B', 'GE', 'STATS 100A', 'COM SCI 181', 'CS ELECTIVE', 'GE', 'TBR', 'COM SCI 130', 'CS ELECTIVE', 'GE', 'SCI/TECH', 'CS ELECTIVE', 'CS ELECTIVE', 'TBR', 'CS ELECTIVE', 'SCI/TECH', 'TBR'];
 
