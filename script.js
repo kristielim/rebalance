@@ -5,34 +5,41 @@ const prereqs = {
     'Math 31A': {prereqs: 'Math 30B', coreqs: 'none'}
 };
 
-//const classes = ['CS1', 'CS31', 'Eng Comp 3', 'Math 31A', 'CS1', 'CS31', 'Eng Comp 3', 'Math 31A', 'CS1', 'CS31', 'Eng Comp 3', 'Math 31A', 'CS1', 'CS31', 'Eng Comp 3', 'Math 31A'];
+const allClasses = ['COM SCI 1', 'COM SCI 31', 'ENGCOMP 3', 'MATH 31A', 'COM SCI 32', 'MATH 31B', 'PHYSICS 1A', 'COM SCI 33', 'MATH 32A', 'PHYSICS 1B', 'COM SCI 35L', 'COM SCI M51A', 'MATH 32B', 'MATH 33A', 'MATH 61', 'PHYSICS 1C', 'PHYSICS 4BL', 'COM SCI 111', 'COM SCI M152A', 'MATH 33B', 'GE', 'COM SCI 118', 'COM SCI 180', 'GE', 'SCI/TECH', 'COM SCI 131', 'COM SCI M151B', 'GE', 'STATS 100A', 'COM SCI 181', 'CS ELECTIVE', 'GE', 'TBR', 'COM SCI 130', 'CS ELECTIVE', 'GE', 'SCI/TECH', 'CS ELECTIVE', 'CS ELECTIVE', 'TBR', 'CS ELECTIVE', 'SCI/TECH', 'TBR'];
 
-const allClasses = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44];
-
-const doneClasses = [0, 1, 2, 5, 6];
+const doneClasses = ['ENGCOMP 3', 'MATH 31A', 'MATH 31B'];
 
 const classes = allClasses.filter( ( element ) => !doneClasses.includes( element ) );
 
-const numQuarters = 10;
+const numQuarters = 12;
+
 // input classes
 const createSchedule = (classes) => {
+    // return an array that will contain classes partitioned by quarters
     let schedule = [];
+    
+    let maxClasses = Math.ceil(classes.length / numQuarters);
+    let incompleteQuarters = numQuarters * maxClasses - classes.length;
+    let completeQuarters = numQuarters - incompleteQuarters;
+
+    // start classes per quarter as max classes
+    let classesPerQuarter = maxClasses;
+
     // iterate through list of classes
-    let fourClassQuarters = classes.length % numQuarters;
-    let classesPerQuarter = 4;
     for (let i = 0; i < classes.length;) {
-        if (i >= fourClassQuarters*4) {
-            classesPerQuarter = 3;
+
+        // once all complete quarters have been filled, start using one less class per quarter
+        if (i == completeQuarters * maxClasses) {
+            classesPerQuarter--;
         }
+
+        // push list of classes into schedule
         const quarter = classes.slice(i, i + classesPerQuarter);
         schedule.push(quarter);
         i += classesPerQuarter;
     }
+
     return schedule;
 };
-// // output {
-//     '1': {fall: [], winter: [], spring: []}
-// }
-// [[fall], [winter], [spring]]
 
 console.log(createSchedule(classes));
