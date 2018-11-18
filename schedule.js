@@ -57,8 +57,9 @@ const replaceConflictedClasses = (schedule) => {
         const nextQuarterClass = nextQuarterRow[j];
         // check if class can be swapped
 
-        // replace conflict class with next quarter class
-        const rowAfterSwap = quarterRow;
+        // make copy of quarter row
+        const rowAfterSwap = schedule[i].slice();
+         // replace conflict class with next quarter class
         const conflictIndex = rowAfterSwap.indexOf(conflictClass);
         if (conflictIndex !== -1) {
           rowAfterSwap[conflictIndex] = nextQuarterClass;
