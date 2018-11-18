@@ -9,8 +9,14 @@ describe('Schedule', function () {
       const newSchedule = schedule.replaceConflictedClasses(oldSchedule);
       assert.deepEqual(newSchedule, [['COM SCI 31', 'ENGCOMP 3'], ['COM SCI 32']])
     });
-    it('should replace the conflicted class twice'), function () {
-      const oldSchedule = [['COM SCI 31', 'COM SCI 32'], ['ENGCOMP 3', 'COM SCI 33']];
-    }
+
+    it('should replace the conflicted class twice', function () {
+      const oldSchedule = [['COM SCI 31', 'COM SCI 32'], ['ENGCOMP 3', 'COM SCI 33'], ['COM SCI 1']];
+      const newSchedule = schedule.replaceConflictedClasses(oldSchedule);
+      assert.deepEqual(newSchedule, [['COM SCI 31', 'ENGCOMP 3'],
+      ['COM SCI 32', 'COM SCI 1'],
+      ['COM SCI 33']])
+    });
+
   });
 });

@@ -3,6 +3,7 @@ const prereqs = {
   'COM SCI 31': { prereqs: [], coreqs: 'none' },
   'COM SCI 32': { prereqs: ['COM SCI 31'], coreqs: 'none' },
   'COM SCI 33': { prereqs: ['COM SCI 32'], coreqs: 'none' },
+  'COM SCI 1': { prereqs: [], coreqs: 'none'}
 };
 
 // assume these are in order
@@ -44,6 +45,7 @@ const replaceConflictedClasses = (schedule) => {
   for (let i = 0; i < schedule.length - 1; i++) {
     // this is the list of classes for a particular quarter
     const quarterRow = schedule[i];
+    console.log('quarterRow', quarterRow);
     const conflictClasses = findConflict(quarterRow);
     const noConflictClasses = quarterRow.filter((element) => !conflictClasses.includes(element));
 
@@ -69,7 +71,7 @@ const replaceConflictedClasses = (schedule) => {
   return schedule;
 };
 
-const oldSchedule = [['COM SCI 31', 'COM SCI 32'], ['ENGCOMP 3', 'COM SCI 33']];
+const oldSchedule = [['COM SCI 31', 'COM SCI 32'], ['ENGCOMP 3', 'COM SCI 33'], ['COM SCI 1']];
 console.log(replaceConflictedClasses(oldSchedule));
 
 // input classes
