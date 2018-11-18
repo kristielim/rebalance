@@ -56,9 +56,9 @@ const replaceConflictedClasses = (schedule) => {
                 const rowAfterSwap = [...noConflictClasses, nextQuarterClass];
                 const conflicts = findConflict(rowAfterSwap)
                 if (conflicts.length === 0) {
-                    console.log('this happens');
                     schedule[i] = rowAfterSwap;
                     // note that this does not preserve order
+                    // splice replaces class in next quarter with the conflict class of the previous quarter
                     nextQuarterRow.splice(j, 1, conflictClass);
                     schedule[i + 1] = nextQuarterRow;
                 }
@@ -69,9 +69,10 @@ const replaceConflictedClasses = (schedule) => {
     return schedule;
 };
 
+// test cases
 const oldSchedule = [['COM SCI 31', 'COM SCI 32'],['ENGCOMP 3']];
-
-console.log(replaceConflictedClasses(oldSchedule));
+console.log(replaceConflictedClasses(oldSchedule) == [ [ 'COM SCI 31', 'ENGCOMP 3' ], [ 'COM SCI 32' ] ]);
+// swap but still conflict
 
 // input classes
 const createSchedule = (classes) => {

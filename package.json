@@ -1,0 +1,22 @@
+{
+  "name": "rebalance",
+  "version": "1.0.0",
+  "description": "A schedule rebalancer",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kristielim/rebalance.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kristielim/rebalance/issues"
+  },
+  "homepage": "https://github.com/kristielim/rebalance#readme",
+  "devDependencies": {
+    "mocha": "^5.2.0"
+  }
+}
