@@ -53,9 +53,17 @@ const replaceConflictedClasses = (schedule) => {
       // swap with class in next quarter
       const nextQuarterRow = schedule[i + 1];
       for (let j = 0; j < nextQuarterRow.length; j++) {
+        console.log('this happened');
         const nextQuarterClass = nextQuarterRow[j];
         // check if class can be swapped
-        const rowAfterSwap = [...noConflictClasses, nextQuarterClass];
+
+        // replace conflict class with next quarter class
+        const rowAfterSwap = quarterRow;
+        const conflictIndex = rowAfterSwap.indexOf(conflictClass);
+        if (conflictIndex !== -1) {
+          rowAfterSwap[conflictIndex] = nextQuarterClass;
+        }
+        
         const conflicts = findConflict(rowAfterSwap)
         if (conflicts.length === 0) {
           schedule[i] = rowAfterSwap;
@@ -71,7 +79,7 @@ const replaceConflictedClasses = (schedule) => {
   return schedule;
 };
 
-const oldSchedule = [['COM SCI 31', 'COM SCI 32'], ['ENGCOMP 3', 'COM SCI 33'], ['COM SCI 1']];
+const oldSchedule = [['COM SCI 31', 'COM SCI 32', 'COM SCI 33'], ['ENGCOMP 3', 'COM SCI 1']];
 console.log(replaceConflictedClasses(oldSchedule));
 
 // input classes
