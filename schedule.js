@@ -63,16 +63,10 @@ const replaceConflictedClasses = (schedule) => {
                     schedule[i + 1] = nextQuarterRow;
                 }
             }
-            console.log(conflictClass);
         });
     }
     return schedule;
 };
-
-// test cases
-const oldSchedule = [['COM SCI 31', 'COM SCI 32'],['ENGCOMP 3']];
-console.log(replaceConflictedClasses(oldSchedule) == [ [ 'COM SCI 31', 'ENGCOMP 3' ], [ 'COM SCI 32' ] ]);
-// swap but still conflict
 
 // input classes
 const createSchedule = (classes) => {
@@ -106,3 +100,8 @@ const createSchedule = (classes) => {
 };
 
 //console.log(createSchedule(classes));
+
+module.exports = {
+    replaceConflictedClasses,
+    createSchedule
+}
