@@ -18,29 +18,35 @@ const classes = allClasses.filter((element) => !doneClasses.includes(element));
 
 const numQuarters = 12;
 
-// checks if there is a conflict between classes within a quarter
-// returns a list of classes that need to be swapped out
-const findConflict = (quarterRow) => {
-  const conflictList = []
-  // for each class in the quarter
+// checks if nextClass causes a conflict in quarterRow
+// returns true if no conflict
+const noConflict = (nextClass, quarterRow) => {
   for (let i = 0; i < quarterRow.length; i++) {
-    const className = quarterRow[i];
-    // get prereqs for class
-    const classPrereqs = prereqs[className].prereqs;
-
-    // if any of the prereqs are found in the same quarter, return the class
+    // get prereqs for next class
+    const classPrereqs = prereqs[nextClass].prereqs;
     for (let j = 0; j < classPrereqs.length; j++) {
-      for (let k = 0; k < quarterRow.length; k++) {
-        if (classPrereqs[j] === quarterRow[k]) {
-          conflictList.push(className);
-          break;
-        }
+      if (classPrereqs[j] === quarterRow[i]) {
+        return false;
       }
     }
+    return true;
   }
-  // so it doesn't return duplicates
-  return Array.from(new Set(conflictList));
 };
+
+// checks if row is already full (no undefineds)
+const fullRow = (quarterRow) => {
+  for(let i = 0; i < quarterRow.length; i++) {
+    if (quarterRow[i] === undefined) {
+      return false;
+    }
+  }
+  return true;
+};
+console.log(noConflict('COM SCI 32', [undefined, undefined, undefined]) === true);
+console.log(noConflict('COM SCI 32', ['COM SCI 31', undefined, undefined]) === false);
+console.log(fullRow(['COM SCI 1', 'COM SCI 1', 'COM SCI 1']) === true);
+console.log(fullRow(['COM SCI 1', 'COM SCI 1', undefined]) === false);
+
 
 // return schedule with no conflicts
 const replaceConflictedClasses = (schedule) => {
@@ -85,9 +91,42 @@ const replaceConflictedClasses = (schedule) => {
   return schedule;
 };
 
-const oldSchedule = [['COM SCI 31', 'COM SCI 32', 'COM SCI 33'], ['ENGCOMP 3', 'COM SCI 1', 'COM SCI 111'], ['MATH 31A', 'GE'], ['GE']];
-console.log('start', oldSchedule);
-console.log(replaceConflictedClasses(oldSchedule));
+ const oldSchedule = [['COM SCI 31', 'COM SCI 32', 'COM SCI 33'], ['ENGCOMP 3', 'COM SCI 1', 'COM SCI 111'], ['MATH 31A', 'GE'], ['GE']];
+// console.log('start', oldSchedule);
+// console.log(replaceConflictedClasses(oldSchedule));
+
+// schedule is passed by reference
+// schedule is rearranged so no class conflicts exist
+const rearrangeForConflicts = (classes, schedule) => {
+  // iterate through list of classes
+  // if a conflict is found, move to next quarter
+  // otherwise, keep trying to fill the quarter
+  for (let i = 0; i < schedule.length; i++) {
+    for (let j = 0; j < schedule[i].length; j++) {
+      schedule[i][j] = undefined;
+    }
+  }
+  for (let i = 0; i < classes.length; i++) {
+    const quarterIndex = 0;
+
+    while (true) {
+      const quarterRow = schedule[quarterIndex];
+      if (findConflict(classes[i], quarterRow) || fullRow(quarterRow)) {
+        quarterIndex++;
+      }
+    }
+
+    // class should be placed in the quarter that corresponds to quarterIndex
+    try {
+      addClass(quarterIndex, classes[i], schedule);
+    }
+    catch(err) {
+      console.log('Schedule not found, ', err.message);
+    }
+  }
+}
+rearrangeForConflicts([], oldSchedule);
+console.log(oldSchedule);
 
 // input classes
 const createSchedule = (classes) => {
