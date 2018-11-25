@@ -175,5 +175,6 @@ const createSchedule = (classes) => {
 
 module.exports = {
   replaceConflictedClasses,
-  createSchedule
+  createSchedule, findConflict, fullRow
 }
+
