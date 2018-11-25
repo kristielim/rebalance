@@ -6,11 +6,12 @@ const prereqs = {
   'COM SCI 1': { prereqs: [], coreqs: 'none'},
   'COM SCI 111': {prereqs: ['COM SCI 31', 'COM SCI 32', 'COM SCI 33', 'COM SCI 35L'], coreqs: 'none'},
   'MATH 31A': {prereqs: [], coreqs: 'none'},
-  'GE': {prereqs: [], coreqs: 'none'}
+  'GE': {prereqs: [], coreqs: 'none'},
+  'PHYSICS 1A': {prereqs: [], coreqs: 'none'}
 };
 
 // assume these are in order
-const allClasses = ['COM SCI 1', 'COM SCI 31', 'ENGCOMP 3', 'MATH 31A', 'COM SCI 32', 'MATH 31B', 'PHYSICS 1A', 'COM SCI 33', 'MATH 32A', 'PHYSICS 1B', 'COM SCI 35L', 'COM SCI M51A', 'MATH 32B', 'MATH 33A', 'MATH 61', 'PHYSICS 1C', 'PHYSICS 4BL', 'COM SCI 111', 'COM SCI M152A', 'MATH 33B', 'GE', 'COM SCI 118', 'COM SCI 180', 'GE', 'SCI/TECH', 'COM SCI 131', 'COM SCI M151B', 'GE', 'STATS 100A', 'COM SCI 181', 'CS ELECTIVE', 'GE', 'TBR', 'COM SCI 130', 'CS ELECTIVE', 'GE', 'SCI/TECH', 'CS ELECTIVE', 'CS ELECTIVE', 'TBR', 'CS ELECTIVE', 'SCI/TECH', 'TBR'];
+const allClasses = ['COM SCI 1', 'COM SCI 31', 'ENGCOMP 3', 'MATH 31A', 'COM SCI 32', 'MATH 31B', 'PHYSICS 1A'];//, 'COM SCI 33', 'MATH 32A', 'PHYSICS 1B', 'COM SCI 35L', 'COM SCI M51A', 'MATH 32B', 'MATH 33A', 'MATH 61', 'PHYSICS 1C', 'PHYSICS 4BL', 'COM SCI 111', 'COM SCI M152A', 'MATH 33B', 'GE', 'COM SCI 118', 'COM SCI 180', 'GE', 'SCI/TECH', 'COM SCI 131', 'COM SCI M151B', 'GE', 'STATS 100A', 'COM SCI 181', 'CS ELECTIVE', 'GE', 'TBR', 'COM SCI 130', 'CS ELECTIVE', 'GE', 'SCI/TECH', 'CS ELECTIVE', 'CS ELECTIVE', 'TBR', 'CS ELECTIVE', 'SCI/TECH', 'TBR'];
 
 const doneClasses = ['ENGCOMP 3', 'MATH 31A', 'MATH 31B'];
 
@@ -19,18 +20,18 @@ const classes = allClasses.filter((element) => !doneClasses.includes(element));
 const numQuarters = 12;
 
 // checks if nextClass causes a conflict in quarterRow
-// returns true if no conflict
-const noConflict = (nextClass, quarterRow) => {
+// returns true if there is a conflict
+const findConflict = (nextClass, quarterRow) => {
   for (let i = 0; i < quarterRow.length; i++) {
     // get prereqs for next class
     const classPrereqs = prereqs[nextClass].prereqs;
     for (let j = 0; j < classPrereqs.length; j++) {
       if (classPrereqs[j] === quarterRow[i]) {
-        return false;
+        return true;
       }
     }
-    return true;
   }
+  return false;
 };
 
 // checks if row is already full (no undefineds)
@@ -42,8 +43,9 @@ const fullRow = (quarterRow) => {
   }
   return true;
 };
-console.log(noConflict('COM SCI 32', [undefined, undefined, undefined]) === true);
-console.log(noConflict('COM SCI 32', ['COM SCI 31', undefined, undefined]) === false);
+console.log(findConflict('COM SCI 32', [undefined, undefined, undefined]) === false);
+console.log(findConflict('COM SCI 32', ['COM SCI 31', undefined, undefined]) === true);
+console.log(findConflict('COM SCI 32', ['COM SCI 1', 'COM SCI 31', undefined]) === true);
 console.log(fullRow(['COM SCI 1', 'COM SCI 1', 'COM SCI 1']) === true);
 console.log(fullRow(['COM SCI 1', 'COM SCI 1', undefined]) === false);
 
@@ -107,25 +109,35 @@ const rearrangeForConflicts = (classes, schedule) => {
     }
   }
   for (let i = 0; i < classes.length; i++) {
-    const quarterIndex = 0;
+    let quarterIndex = 0;
 
     while (true) {
       const quarterRow = schedule[quarterIndex];
       if (findConflict(classes[i], quarterRow) || fullRow(quarterRow)) {
         quarterIndex++;
       }
+      else {
+        break;
+      }
     }
-
+    console.log(quarterIndex);
     // class should be placed in the quarter that corresponds to quarterIndex
     try {
-      addClass(quarterIndex, classes[i], schedule);
+      for (let j = 0; j < schedule[quarterIndex].length; j++)
+      {
+        if (schedule[quarterIndex][j]===undefined)
+        {
+          schedule[quarterIndex][j]=classes[i];
+          break;
+        }
+      }
     }
     catch(err) {
       console.log('Schedule not found, ', err.message);
     }
   }
 }
-rearrangeForConflicts([], oldSchedule);
+rearrangeForConflicts(classes, oldSchedule);
 console.log(oldSchedule);
 
 // input classes
