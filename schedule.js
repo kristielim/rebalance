@@ -44,6 +44,7 @@ const fullRow = (quarterRow) => {
 };
 
 // a new schedule is created from the old schedule so no class conflicts exist
+// approach is to fill in a schedule of undefined's from the classes array moving a class to the next quarter if a conflict is found
 const rearrangeForConflicts = (classes, oldSchedule) => {
   // make a copy of schedule but with undefined's for classes
   const schedule = []
@@ -96,6 +97,9 @@ const rearrangeForConflicts = (classes, oldSchedule) => {
 
 // input classes
 const createSchedule = (classes, numQuarters) => {
+  // TODO: refactor so that you partition in a separate function
+  // TODO: refactor so you only pass in the lengths of the quarter arrays, slightly more efficient but not really
+
   // return an array that will contain classes partitioned by quarters
   let schedule = [];
 
