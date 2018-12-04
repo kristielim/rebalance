@@ -17,7 +17,7 @@ const doneClasses = ['ENGCOMP 3', 'MATH 31A', 'MATH 31B'];
 
 const classes = allClasses.filter((element) => !doneClasses.includes(element));
 
-const numQuarters = 12;
+const numQuarters = 2;
 
 // checks if nextClass causes a conflict in quarterRow
 // returns true if there is a conflict
@@ -44,28 +44,38 @@ const fullRow = (quarterRow) => {
   return true;
 };
 
- const oldSchedule = [['COM SCI 31', 'COM SCI 32', 'COM SCI 33'], ['ENGCOMP 3', 'COM SCI 1', 'COM SCI 111'], ['MATH 31A', 'GE'], ['GE']];
+ //const oldSchedule = [['COM SCI 31', 'COM SCI 32', 'COM SCI 33'], ['ENGCOMP 3', 'COM SCI 1', 'COM SCI 111'], ['MATH 31A', 'GE'], ['GE']];
 // console.log('start', oldSchedule);
 // console.log(replaceConflictedClasses(oldSchedule));
 
-// schedule is passed by reference
-// schedule is rearranged so no class conflicts exist
-const rearrangeForConflicts = (classes, schedule) => {
+// a new schedule is created from the old schedule so no class conflicts exist
+const rearrangeForConflicts = (classes, oldSchedule) => {
+  // make a copy of schedule but with undefined's for classes
+  const schedule = []
+  for (let i = 0; i < oldSchedule.length; i++) {
+    schedule.push([])
+    for (let j = 0; j < oldSchedule[i].length; j++) {
+      schedule[i].push(undefined);
+    }
+  }
+  console.log('schedule after replacement with undefineds', schedule);
+
   // iterate through list of classes
   // if a conflict is found, move to next quarter
   // otherwise, keep trying to fill the quarter
-  for (let i = 0; i < schedule.length; i++) {
-    for (let j = 0; j < schedule[i].length; j++) {
-      schedule[i][j] = undefined;
-    }
-  }
   for (let i = 0; i < classes.length; i++) {
     let quarterIndex = 0;
 
     while (true) {
       const quarterRow = schedule[quarterIndex];
       if (findConflict(classes[i], quarterRow) || fullRow(quarterRow)) {
-        quarterIndex++;
+        if (quarterIndex < schedule.length - 1) {
+          quarterIndex++;
+        }
+        else {
+          console.log('Schedule not found');
+          return false;
+        }
       }
       else {
         break;
@@ -84,11 +94,11 @@ const rearrangeForConflicts = (classes, schedule) => {
     }
     catch(err) {
       console.log('Schedule not found, ', err.message);
+      return false;
     }
   }
-}
-rearrangeForConflicts(classes, oldSchedule);
-console.log(oldSchedule);
+  return schedule;
+};
 
 // input classes
 const createSchedule = (classes) => {
@@ -116,15 +126,15 @@ const createSchedule = (classes) => {
     i += classesPerQuarter;
   }
 
-  rearrangeForConflicts(schedule);
+  const newSchedule = rearrangeForConflicts(classes, schedule);
 
-  return schedule;
+  return newSchedule;
 };
 
-//console.log(createSchedule(classes));
+console.log(createSchedule(classes));
 
 module.exports = {
-  replaceConflictedClasses,
+  rearrangeForConflicts,
   createSchedule, findConflict, fullRow
 }
 
