@@ -7,7 +7,8 @@ const prereqs = {
   'COM SCI 111': {prereqs: ['COM SCI 31', 'COM SCI 32', 'COM SCI 33', 'COM SCI 35L'], coreqs: 'none'},
   'MATH 31A': {prereqs: [], coreqs: 'none'},
   'GE': {prereqs: [], coreqs: 'none'},
-  'PHYSICS 1A': {prereqs: [], coreqs: 'none'}
+  'PHYSICS 1A': {prereqs: [], coreqs: 'none'},
+  'PHYSICS 1B': {prereqs: ['PHYSICS 1A'], coreqs: 'none'}
 };
 
 // assume these are in order
@@ -16,8 +17,6 @@ const allClasses = ['COM SCI 1', 'COM SCI 31', 'ENGCOMP 3', 'MATH 31A', 'COM SCI
 const doneClasses = ['ENGCOMP 3', 'MATH 31A', 'MATH 31B'];
 
 const classes = allClasses.filter((element) => !doneClasses.includes(element));
-
-const numQuarters = 2;
 
 // checks if nextClass causes a conflict in quarterRow
 // returns true if there is a conflict
@@ -44,10 +43,6 @@ const fullRow = (quarterRow) => {
   return true;
 };
 
- //const oldSchedule = [['COM SCI 31', 'COM SCI 32', 'COM SCI 33'], ['ENGCOMP 3', 'COM SCI 1', 'COM SCI 111'], ['MATH 31A', 'GE'], ['GE']];
-// console.log('start', oldSchedule);
-// console.log(replaceConflictedClasses(oldSchedule));
-
 // a new schedule is created from the old schedule so no class conflicts exist
 const rearrangeForConflicts = (classes, oldSchedule) => {
   // make a copy of schedule but with undefined's for classes
@@ -58,7 +53,6 @@ const rearrangeForConflicts = (classes, oldSchedule) => {
       schedule[i].push(undefined);
     }
   }
-  console.log('schedule after replacement with undefineds', schedule);
 
   // iterate through list of classes
   // if a conflict is found, move to next quarter
@@ -101,7 +95,7 @@ const rearrangeForConflicts = (classes, oldSchedule) => {
 };
 
 // input classes
-const createSchedule = (classes) => {
+const createSchedule = (classes, numQuarters) => {
   // return an array that will contain classes partitioned by quarters
   let schedule = [];
 
@@ -130,8 +124,6 @@ const createSchedule = (classes) => {
 
   return newSchedule;
 };
-
-console.log(createSchedule(classes));
 
 module.exports = {
   rearrangeForConflicts,
