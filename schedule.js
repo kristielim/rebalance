@@ -43,55 +43,6 @@ const fullRow = (quarterRow) => {
   }
   return true;
 };
-console.log(findConflict('COM SCI 32', [undefined, undefined, undefined]) === false);
-console.log(findConflict('COM SCI 32', ['COM SCI 31', undefined, undefined]) === true);
-console.log(findConflict('COM SCI 32', ['COM SCI 1', 'COM SCI 31', undefined]) === true);
-console.log(fullRow(['COM SCI 1', 'COM SCI 1', 'COM SCI 1']) === true);
-console.log(fullRow(['COM SCI 1', 'COM SCI 1', undefined]) === false);
-
-
-// return schedule with no conflicts
-const replaceConflictedClasses = (schedule) => {
-  // breaks if there is a conflict in the last quarter
-  // iterate through the schedule and look for prereq conflicts
-  for (let i = 0; i < schedule.length - 1; i++) {
-    // this is the list of classes for a particular quarter
-    const quarterRow = schedule[i];
-    console.log('quarterRow', quarterRow);
-    const conflictClasses = findConflict(quarterRow);
-    const noConflictClasses = quarterRow.filter((element) => !conflictClasses.includes(element));
-
-    conflictClasses.forEach((conflictClass) => {
-      // swap with class in next quarter
-      const nextQuarterRow = schedule[i + 1];
-      for (let j = 0; j < nextQuarterRow.length; j++) {
-        console.log('this happened');
-        const nextQuarterClass = nextQuarterRow[j];
-        // check if class can be swapped
-
-        // make copy of quarter row
-        const rowAfterSwap = schedule[i].slice();
-         // replace conflict class with next quarter class
-        const conflictIndex = rowAfterSwap.indexOf(conflictClass);
-        if (conflictIndex !== -1) {
-          rowAfterSwap[conflictIndex] = nextQuarterClass;
-        }
-        
-        const conflicts = findConflict(rowAfterSwap)
-        if (conflicts.length === 0) {
-          schedule[i] = rowAfterSwap;
-          // note that this does not preserve order
-          // splice replaces class in next quarter with the conflict class of the previous quarter
-          nextQuarterRow.splice(j, 1, conflictClass);
-          schedule[i + 1] = nextQuarterRow;
-          console.log(schedule);
-          break;
-        }
-      }
-    });
-  }
-  return schedule;
-};
 
  const oldSchedule = [['COM SCI 31', 'COM SCI 32', 'COM SCI 33'], ['ENGCOMP 3', 'COM SCI 1', 'COM SCI 111'], ['MATH 31A', 'GE'], ['GE']];
 // console.log('start', oldSchedule);
@@ -120,7 +71,6 @@ const rearrangeForConflicts = (classes, schedule) => {
         break;
       }
     }
-    console.log(quarterIndex);
     // class should be placed in the quarter that corresponds to quarterIndex
     try {
       for (let j = 0; j < schedule[quarterIndex].length; j++)
@@ -166,7 +116,7 @@ const createSchedule = (classes) => {
     i += classesPerQuarter;
   }
 
-  schedule = replaceConflictedClasses(schedule);
+  rearrangeForConflicts(schedule);
 
   return schedule;
 };
